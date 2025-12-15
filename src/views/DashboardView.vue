@@ -1,9 +1,17 @@
 <script setup>
 import { useTransactionStore } from '@/stores/transaction';
 import Card from 'primevue/card';
+import { computed } from 'vue';
 
+const store = useTransactionStore();
 
-const store = useTransactionStore()
+const recentTransaction = computed(() => {
+  return store.transactions
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 5);
+});
+console.log(recentTransaction.value);
 </script>
 
 <template>
@@ -22,6 +30,16 @@ const store = useTransactionStore()
       <template #content>{{ store.totalExpense }}</template>
     </Card>
   </div>
+  <div>
+    <h2>Recent Transactions</h2>
+    <Card v-for="transaction in recentTransaction" :key="transaction.id" class="transaction-card">
+      <template #content>
+        <div>{{ transaction.description }}</div>
+        <div>{{ transaction.amount }}</div>
+        <div>{{ transaction.date }}</div>
+      </template>
+    </Card>
+  </div>
 </template>
 
 <style scoped>
@@ -30,7 +48,11 @@ const store = useTransactionStore()
   gap: 1rem;
 }
 
-@media (max-width:768px) {
+.transaction-card {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
   .card-container {
     flex-direction: column;
   }

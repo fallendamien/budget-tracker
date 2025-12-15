@@ -9,3 +9,9 @@ import { RouterView } from 'vue-router';
 </template>
 
 <style scoped></style>
+
+<style>
+body {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+}
+</style>

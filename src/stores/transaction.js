@@ -91,8 +91,24 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const balance = computed(() => totalIncome.value - totalExpense.value);
 
-  function addTransaction() {
-    alert('test');
+  function addTransaction(formData) {
+    // console.log(formData);
+
+    // 1. Create new transaction object
+    const newTransaction = {
+      id: crypto.randomUUID(),
+      type: formData.type,
+      amount: formData.amount,
+      category: formData.category,
+      description: formData.description,
+      date: formData.date.toISOString().split('T')[0],
+      createdAt: Date.now(),
+    };
+
+    // 2. Add to transactions array
+    transactions.value.push(newTransaction);
+
+    // console.log(newTransaction);
   }
 
   function updateTransaction() {}

@@ -5,6 +5,11 @@ import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
+import { useTransactionStore } from '@/stores/transaction';
+import { useRouter } from 'vue-router';
+
+const store = useTransactionStore();
+const router = useRouter();
 
 const form = reactive({
   type: '',
@@ -33,7 +38,9 @@ const categoryOptions = [
 ];
 
 function handleSubmit() {
-  console.log('Form data:', form);
+  // console.log('Form data:', form);
+  store.addTransaction(form);
+  router.push({ name: 'dashboard' }); //navigate to dashboard
 }
 </script>
 

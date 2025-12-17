@@ -11,7 +11,6 @@ const recentTransaction = computed(() => {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);
 });
-console.log(recentTransaction.value);
 </script>
 
 <template>
@@ -34,9 +33,13 @@ console.log(recentTransaction.value);
     <h2>Recent Transactions</h2>
     <Card v-for="transaction in recentTransaction" :key="transaction.id" class="transaction-card">
       <template #content>
-        <div>{{ transaction.description }}</div>
-        <div>{{ transaction.amount }}</div>
-        <div>{{ transaction.date }}</div>
+        <span>
+          <strong>
+            <u>{{ transaction.description }}</u>
+          </strong>
+        </span>
+        <div>RM: {{ transaction.amount }}</div>
+        <div>Date: {{ transaction.date }}</div>
       </template>
     </Card>
   </div>

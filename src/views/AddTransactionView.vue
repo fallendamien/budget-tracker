@@ -87,7 +87,7 @@ function handleSubmit() {
     <!-- Date -->
     <div class="form-field">
       <label>Date</label>
-      <DatePicker v-model="form.date" placeholder="Select date"></DatePicker>
+      <DatePicker v-model="form.date" placeholder="Select date" date-format="dd/mm/yy"></DatePicker>
     </div>
 
     <Button label="Add Transaction" @click="handleSubmit"></Button>

@@ -1,4 +1,5 @@
 <script setup>
+import { useFormatDate } from '@/composables/useFormatDate';
 import { useTransactionStore } from '@/stores/transaction';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
@@ -8,18 +9,23 @@ import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import { computed, ref } from 'vue';
 
+// Stores/Composables
 const store = useTransactionStore();
+const { formatDate } = useFormatDate();
+
+// Constants
 const columns = [
   { field: 'type', header: 'Type' },
   { field: 'amount', header: 'Amount' },
   { field: 'category', header: 'Category' },
   { field: 'description', header: 'Description' },
-  { field: 'date', header: 'Date' },
 ];
 
+// Local reactive state
 const selectedFilter = ref('all'); // 'all', 'income', or 'expense'
 const searchTerm = ref('');
 
+// Computed
 const filteredTransactions = computed(() => {
   let result = store.transactions;
 
@@ -73,6 +79,11 @@ const filteredTransactions = computed(() => {
         :header="col.header"
         sortable
       ></Column>
+      <Column field="date" header="Date" sortable>
+        <template #body="slotProps">
+          {{ formatDate(slotProps.data.date) }}
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>

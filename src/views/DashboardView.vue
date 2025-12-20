@@ -1,9 +1,12 @@
 <script setup>
+import { useFormatDate } from '@/composables/useFormatDate';
 import { useTransactionStore } from '@/stores/transaction';
 import Card from 'primevue/card';
 import { computed } from 'vue';
 
 const store = useTransactionStore();
+
+const { formatDate } = useFormatDate();
 
 const recentTransaction = computed(() => {
   return store.transactions
@@ -39,7 +42,7 @@ const recentTransaction = computed(() => {
           </strong>
         </span>
         <div>RM: {{ transaction.amount }}</div>
-        <div>Date: {{ transaction.date }}</div>
+        <div>Date: {{ formatDate(transaction.date) }}</div>
       </template>
     </Card>
   </div>

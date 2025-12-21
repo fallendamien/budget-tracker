@@ -77,20 +77,20 @@ export const useTransactionStore = defineStore('transaction', () => {
     },
   ]);
 
+  // Computed
   const totalIncome = computed(() => {
     return transactions.value
       .filter((t) => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
   });
-
   const totalExpense = computed(() => {
     return transactions.value
       .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
   });
-
   const balance = computed(() => totalIncome.value - totalExpense.value);
 
+  // Functions
   function addTransaction(formData) {
     // console.log(formData);
 
@@ -111,9 +111,22 @@ export const useTransactionStore = defineStore('transaction', () => {
     // console.log(newTransaction);
   }
 
-  function updateTransaction() {}
+  function updateTransaction(id, updatedData) {
+    const index = transactions.value.findIndex((t) => t.id === id);
+    if (index !== -1) {
+      transactions.value[index] = {
+        ...transactions.value[index],
+        ...updatedData,
+      };
+    }
+  }
 
-  function deleteTransaction() {}
+  function deleteTransaction(id) {
+    const index = transactions.value.findIndex((t) => t.id === id);
+    if (index !== -1) {
+      transactions.value.splice(index, 1);
+    }
+  }
 
   return {
     transactions,

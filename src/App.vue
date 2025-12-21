@@ -1,11 +1,11 @@
 <script setup>
+import ConfirmDialog from 'primevue/confirmdialog';
 import { RouterView } from 'vue-router';
-
-
 </script>
 
 <template>
-  <RouterView></RouterView>
+  <confirm-dialog></confirm-dialog>
+  <router-view></router-view>
 </template>
 
 <style scoped></style>

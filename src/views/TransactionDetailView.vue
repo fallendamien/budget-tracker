@@ -10,7 +10,7 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import DatePicker from 'primevue/datepicker';
 
-// Store/Composables
+// Stores/Composables
 const route = useRoute();
 const store = useTransactionStore();
 const router = useRouter();

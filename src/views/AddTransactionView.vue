@@ -34,6 +34,8 @@ const categoryOptions = [
   'Salary',
   'Freelance',
   'Gift',
+  'Sports',
+  'Supplements',
   'Other',
 ];
 

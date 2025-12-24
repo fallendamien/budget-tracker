@@ -8,10 +8,12 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 // Stores/Composables
 const store = useTransactionStore();
 const { formatDate } = useFormatDate();
+const router = useRouter();
 
 // Constants
 const columns = [
@@ -46,6 +48,11 @@ const filteredTransactions = computed(() => {
   }
   return result; //final filtered result
 });
+
+// Functions
+function onRowClick(event) {
+  router.push(`/transactions/${event.data.id}`);
+}
 </script>
 
 <template>
@@ -66,7 +73,14 @@ const filteredTransactions = computed(() => {
       <Button label="Income" @click="selectedFilter = 'income'"></Button>
       <Button label="Expense" @click="selectedFilter = 'expense'"></Button>
     </div>
-    <DataTable :value="filteredTransactions" table-style="min-width:50rem" paginator :rows="5">
+    <DataTable
+      :value="filteredTransactions"
+      table-style="min-width:50rem"
+      paginator
+      :rows="5"
+      @row-click="onRowClick"
+      selection-mode="single"
+    >
       <Column header="#" :exportable="false">
         <template #body="slotProps">
           {{ slotProps.index + 1 }}

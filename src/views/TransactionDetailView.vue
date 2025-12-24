@@ -9,6 +9,7 @@ import Select from 'primevue/select';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import DatePicker from 'primevue/datepicker';
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, TYPE_OPTIONS } from '@/constants';
 
 // Stores/Composables
 const route = useRoute();
@@ -16,6 +17,9 @@ const store = useTransactionStore();
 const router = useRouter();
 const confirm = useConfirm();
 const { formatDate } = useFormatDate();
+
+// Constants
+const typeOptions = TYPE_OPTIONS;
 
 // Local state
 const isEditing = ref(false);
@@ -32,6 +36,16 @@ const transaction = computed(() => {
   const id = route.params.id;
   return store.transactions.find((t) => t.id === id);
 });
+
+const categoryOptions = computed(() => {
+  if (editForm.value.type === 'income') {
+    return INCOME_CATEGORIES;
+  } else if (editForm.value.type === 'expense') {
+    return EXPENSE_CATEGORIES;
+  }
+  return [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES];
+});
+
 // Functions
 function toggleEdit() {
   isEditing.value = !isEditing.value;
@@ -98,7 +112,9 @@ function handleSave() {
         <strong class="w-7rem">Type:</strong>
         <Select
           v-model="editForm.type"
-          :options="['income', 'expense']"
+          :options="typeOptions"
+          option-label="label"
+          option-value="value"
           placeholder="Select type"
           class="flex-1"
         ></Select>
@@ -115,7 +131,12 @@ function handleSave() {
       </div>
       <div class="flex align-items-center">
         <strong class="w-7rem">Category:</strong>
-        <InputText v-model="editForm.category" placeholder="Category" class="flex-1"></InputText>
+        <Select
+          v-model="editForm.category"
+          :options="categoryOptions"
+          placeholder="Select category"
+          class="flex-1"
+        ></Select>
       </div>
       <div class="flex align-items-center">
         <strong class="w-7rem">Description:</strong>

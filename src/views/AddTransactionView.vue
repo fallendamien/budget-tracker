@@ -7,6 +7,7 @@ import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
 import { useTransactionStore } from '@/stores/transaction';
 import { useRouter } from 'vue-router';
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, TYPE_OPTIONS } from '@/constants';
 
 const store = useTransactionStore();
 const router = useRouter();
@@ -19,25 +20,8 @@ const form = reactive({
   date: '',
 });
 
-const typeOptions = [
-  { label: 'Income', value: 'income' },
-  { label: 'Expense', value: 'expense' },
-];
-
-const categoryOptions = [
-  'Food',
-  'Transport',
-  'Entertainment',
-  'Bills',
-  'Shopping',
-  'Health',
-  'Salary',
-  'Freelance',
-  'Gift',
-  'Sports',
-  'Supplements',
-  'Other',
-];
+const typeOptions = TYPE_OPTIONS;
+const categoryOptions = [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES];
 
 function handleSubmit() {
   // console.log('Form data:', form);

@@ -1,6 +1,7 @@
 <script setup>
 import { useFormatDate } from '@/composables/useFormatDate';
 import { useTransactionStore } from '@/stores/transaction';
+import Tag from 'primevue/tag';
 import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
@@ -17,7 +18,6 @@ const router = useRouter();
 
 // Constants
 const columns = [
-  { field: 'type', header: 'Type' },
   { field: 'amount', header: 'Amount' },
   { field: 'category', header: 'Category' },
   { field: 'description', header: 'Description' },
@@ -80,12 +80,22 @@ function onRowClick(event) {
       :rows="5"
       @row-click="onRowClick"
       selection-mode="single"
+      sort-field="createdAt"
+      sort-order="-1"
     >
       <Column header="#" :exportable="false">
         <template #body="slotProps">
           {{ slotProps.index + 1 }}
         </template>
       </Column>
+      <Column field="type" header="Type" sortable>
+        <template #body="slotProps">
+          <Tag
+            :value="slotProps.data.type.charAt(0).toUpperCase() + slotProps.data.type.slice(1)"
+            :severity="slotProps.data.type === 'income' ? 'success' : 'danger'"
+          >
+          </Tag> </template
+      ></Column>
       <Column
         v-for="col in columns"
         :key="col.field"

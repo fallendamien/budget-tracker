@@ -81,7 +81,7 @@ function onRowClick(event) {
       @row-click="onRowClick"
       selection-mode="single"
       sort-field="createdAt"
-      sort-order="-1"
+      :sort-order="-1"
     >
       <Column header="#" :exportable="false">
         <template #body="slotProps">

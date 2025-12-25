@@ -61,6 +61,7 @@ function toggleEdit() {
     };
   }
 }
+
 function handleDelete() {
   confirm.require({
     message: 'Are you sure you want to delete this transaction?',
@@ -74,6 +75,7 @@ function handleDelete() {
     },
   });
 }
+
 function handleSave() {
   const formattedData = {
     ...editForm.value,
@@ -82,10 +84,23 @@ function handleSave() {
   store.updateTransaction(transaction.value.id, formattedData);
   isEditing.value = false;
 }
+
+function goBack() {
+  router.push('/transactions');
+}
 </script>
 
 <template>
   <div>
+    <Button
+      label="Back"
+      icon="pi pi-arrow-left"
+      @click="goBack"
+      severity="secondary"
+      text
+      class="mb-3"
+    ></Button>
+
     <h1>Transaction Detail</h1>
 
     <!-- View Mode -->

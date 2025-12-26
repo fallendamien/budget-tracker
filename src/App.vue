@@ -19,7 +19,6 @@ onMounted(() => {
     <div class="nav-links">
       <router-link to="/" class="nav-link">Dashboard</router-link>
       <router-link to="/transactions" class="nav-link">Transactions</router-link>
-      <router-link to="add-transaction" class="nav-link">Add Transaction</router-link>
     </div>
   </nav>
 
@@ -30,18 +29,19 @@ onMounted(() => {
 
 <style scoped>
 .navbar {
-  background-color: #1a1a1a;
+  background-color: #ffffff;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 .nav-brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #1f2937;
 }
 
 .nav-links {
@@ -50,18 +50,18 @@ onMounted(() => {
 }
 
 .nav-link {
-  color: #aaa;
+  color: #6b7280;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
 }
 
 .nav-link:hover {
-  color: #fff;
+  color: #111827;
 }
 
 .nav-link.router-link-active {
-  color: #4ade80;
+  color: #10b981;
 }
 
 .container {
@@ -101,5 +101,8 @@ onMounted(() => {
 <style>
 body {
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  background-color: #f8f9fa;
+  color: #1f2937;
+  margin: 0;
 }
 </style>

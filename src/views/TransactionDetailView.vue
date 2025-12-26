@@ -4,6 +4,8 @@ import { useTransactionStore } from '@/stores/transaction';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Button from 'primevue/button';
+import Card from 'primevue/card';
+import Tag from 'primevue/tag';
 import { useConfirm } from 'primevue/useconfirm';
 import Select from 'primevue/select';
 import InputNumber from 'primevue/inputnumber';
@@ -101,89 +103,195 @@ function goBack() {
       class="mb-3"
     ></Button>
 
-    <h1>Transaction Detail</h1>
+    <Card>
+      <template #title>
+        <div class="card-header">
+          <span>Transaction Detail</span>
+          <div class="header-actions" v-if="!isEditing">
+            <Button
+              label="Edit"
+              icon="pi pi-pencil"
+              @click="toggleEdit"
+              severity="info"
+              size="small"
+              outlined
+            ></Button>
+            <Button
+              label="Delete"
+              icon="pi pi-trash"
+              @click="handleDelete"
+              severity="danger"
+              size="small"
+              outlined
+            ></Button>
+          </div>
+        </div>
+      </template>
 
-    <!-- View Mode -->
-    <div v-if="!isEditing">
-      <p><strong>Type:</strong> {{ transaction?.type }}</p>
-      <p><strong>Amount:</strong> RM {{ transaction?.amount }}</p>
-      <p><strong>Category:</strong> {{ transaction?.category }}</p>
-      <p><strong>Description:</strong> {{ transaction?.description }}</p>
-      <p><strong>Date:</strong> {{ formatDate(transaction?.date) }}</p>
-      <div style="margin-top: 20px">
-        <Button
-          label="Edit"
-          @click="toggleEdit"
-          severity="info"
-          style="margin-right: 10px"
-        ></Button>
-        <Button label="Delete" @click="handleDelete" severity="danger"></Button>
-      </div>
-    </div>
+      <template #content>
+        <!-- View Mode -->
+        <div v-if="!isEditing" class="detail-grid">
+          <div class="detail-row">
+            <span class="detail-label">Type</span>
+            <Tag
+              :value="transaction?.type.charAt(0).toUpperCase() + transaction?.type.slice(1)"
+              :severity="transaction?.type === 'income' ? 'success' : 'danger'"
+            ></Tag>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Amount</span>
+            <span class="detail-value amount" :class="transaction?.type">
+              RM {{ transaction?.amount }}
+            </span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Category</span>
+            <span class="detail-value">{{ transaction?.category }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">{{ transaction?.description }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Date</span>
+            <span class="detail-value">{{ formatDate(transaction?.date) }}</span>
+          </div>
+        </div>
 
-    <!-- Edit Mode -->
-    <div v-else class="flex flex-column gap-3" style="max-width: 600px">
-      <div class="flex align-items-center">
-        <strong class="w-7rem">Type:</strong>
-        <Select
-          v-model="editForm.type"
-          :options="typeOptions"
-          option-label="label"
-          option-value="value"
-          placeholder="Select type"
-          class="flex-1"
-        ></Select>
-      </div>
-      <div class="flex align-item-center">
-        <strong class="w-7rem">Amount:</strong>
-        <InputNumber
-          v-model="editForm.amount"
-          placeholder="Amount"
-          mode="currency"
-          currency="MYR"
-          class="flex-1"
-        ></InputNumber>
-      </div>
-      <div class="flex align-items-center">
-        <strong class="w-7rem">Category:</strong>
-        <Select
-          v-model="editForm.category"
-          :options="categoryOptions"
-          placeholder="Select category"
-          class="flex-1"
-        ></Select>
-      </div>
-      <div class="flex align-items-center">
-        <strong class="w-7rem">Description:</strong>
-        <InputText
-          v-model="editForm.description"
-          placeholder="Description"
-          class="flex-1"
-        ></InputText>
-      </div>
-      <div class="flex align-items-center">
-        <strong class="w-7rem">Date:</strong>
-        <DatePicker
-          v-model="editForm.date"
-          placeholder="Select date"
-          date-format="dd/mm/yy"
-        ></DatePicker>
-      </div>
-      <div>
-        <Button
-          label="Save"
-          @click="handleSave"
-          severity="success"
-          style="margin-right: 10px"
-        ></Button>
-        <Button label="Cancel" @click="toggleEdit" severity="secondary"></Button>
-      </div>
-    </div>
+        <!-- Edit Mode -->
+        <div v-else class="form-container">
+          <div class="form-field">
+            <label>Type</label>
+            <Select
+              v-model="editForm.type"
+              :options="typeOptions"
+              option-label="label"
+              option-value="value"
+              placeholder="Select type"
+              class="w-full"
+            ></Select>
+          </div>
+          <div class="form-field">
+            <label>Amount</label>
+            <InputNumber
+              v-model="editForm.amount"
+              placeholder="Amount"
+              mode="currency"
+              currency="MYR"
+              class="w-full"
+            ></InputNumber>
+          </div>
+          <div class="form-field">
+            <label>Category</label>
+            <Select
+              v-model="editForm.category"
+              :options="categoryOptions"
+              placeholder="Select category"
+              class="w-full"
+            ></Select>
+          </div>
+          <div class="form-field">
+            <label>Description</label>
+            <InputText
+              v-model="editForm.description"
+              placeholder="Description"
+              class="w-full"
+            ></InputText>
+          </div>
+          <div class="form-field">
+            <label>Date</label>
+            <DatePicker
+              v-model="editForm.date"
+              placeholder="Select date"
+              date-format="dd/mm/yy"
+              class="w-full"
+            ></DatePicker>
+          </div>
+          <div class="button-group">
+            <Button label="Save" @click="handleSave" severity="success"></Button>
+            <Button label="Cancel" @click="toggleEdit" severity="secondary"></Button>
+          </div>
+        </div>
+      </template>
+    </Card>
   </div>
 </template>
 
 <style scoped>
-.p-datepicker-input {
-  width: 100%;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  width: 120px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #111827;
+  font-weight: 500;
+}
+
+.detail-value.amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.detail-value.amount.income {
+  color: #10b981;
+}
+
+.detail-value.amount.expense {
+  color: #ef4444;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 </style>

@@ -9,6 +9,7 @@ const router = createRouter({
     { path: '/', name: 'dashboard', component: DashboardView },
     { path: '/transactions', name: 'transactions', component: TransactionsView },
     { path: '/transactions/:id', name: 'transactionDetail', component: TransactionDetailView },
+    { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 });
 

@@ -17,8 +17,14 @@ onMounted(() => {
   <nav class="navbar">
     <div class="nav-brand">Budget Tracker</div>
     <div class="nav-links">
-      <router-link to="/" class="nav-link">Dashboard</router-link>
-      <router-link to="/transactions" class="nav-link">Transactions</router-link>
+      <router-link to="/" class="nav-link">
+        <i class="pi pi-chart-line"></i>
+        <span>Dashboard</span>
+      </router-link>
+      <router-link to="/transactions" class="nav-link">
+        <i class="pi pi-list"></i>
+        <span>Transactions</span>
+      </router-link>
     </div>
   </nav>
 
@@ -54,6 +60,13 @@ onMounted(() => {
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-link i {
+  font-size: 1.125rem;
 }
 
 .nav-link:hover {
@@ -72,10 +85,7 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column;
-    align-items: flex-start;
     padding: 1rem;
-    gap: 1rem;
   }
 
   .nav-brand {
@@ -83,13 +93,15 @@ onMounted(() => {
   }
 
   .nav-links {
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
+    gap: 1.5rem;
   }
 
-  .nav-link {
-    padding: 0.5rem 0;
+  .nav-link span {
+    display: none;
+  }
+
+  .nav-link i {
+    font-size: 1.5rem;
   }
 
   .container {

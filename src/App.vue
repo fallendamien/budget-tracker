@@ -15,7 +15,10 @@ onMounted(() => {
 <template>
   <confirm-dialog></confirm-dialog>
   <nav class="navbar">
-    <div class="nav-brand">Budget Tracker</div>
+    <div class="nav-brand">
+      <i class="pi pi-chart-bar brand-icon"></i>
+      Budget Tracker
+    </div>
     <div class="nav-links">
       <router-link to="/" class="nav-link">
         <i class="pi pi-chart-line"></i>
@@ -47,7 +50,16 @@ onMounted(() => {
 .nav-brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #4b5563;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-icon {
+  font-size: 1.75rem;
+  color: #4b5563; /* Softer gray */
 }
 
 .nav-links {
@@ -61,8 +73,9 @@ onMounted(() => {
   font-weight: 500;
   transition: color 0.3s;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .nav-link i {
@@ -89,7 +102,7 @@ onMounted(() => {
   }
 
   .nav-brand {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 
   .nav-links {
@@ -97,11 +110,12 @@ onMounted(() => {
   }
 
   .nav-link span {
-    display: none;
+    font-size: 0.625rem;
+    font-weight: 500;
   }
 
   .nav-link i {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   .container {
@@ -116,5 +130,19 @@ body {
   background-color: #f8f9fa;
   color: #1f2937;
   margin: 0;
+}
+
+/* Mobile Dialog Styles - Add breathing room */
+@media (max-width: 768px) {
+  .p-dialog {
+    margin: 1rem !important;
+    max-width: calc(100% - 2rem) !important;
+    width: 100% !important;
+  }
+
+  .p-confirmdialog {
+    margin: 1rem !important;
+    max-width: calc(100% - 2rem) !important;
+  }
 }
 </style>

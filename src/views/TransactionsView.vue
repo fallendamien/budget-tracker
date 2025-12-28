@@ -13,7 +13,7 @@ import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 // Stores/Composables
@@ -34,6 +34,21 @@ const categoryOptions = [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES];
 const selectedFilter = ref('all'); // 'all', 'income', or 'expense'
 const searchTerm = ref('');
 const showAddDialog = ref(false);
+const isMobile = ref(false);
+
+// Screen size detection
+function checkMobile() {
+  isMobile.value = window.innerWidth < 768;
+}
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
 
 // Form state
 const form = reactive({
@@ -71,6 +86,22 @@ function onRowClick(event) {
   router.push(`/transactions/${event.data.id}`);
 }
 
+function getCategoryIcon(category) {
+  const iconMap = {
+    Salary: 'pi pi-briefcase',
+    Freelance: 'pi pi-users',
+    Investment: 'pi pi-chart-line',
+    Food: 'pi pi-shopping-cart',
+    Transport: 'pi pi-car',
+    Entertainment: 'pi pi-play',
+    Bills: 'pi pi-file',
+    Shopping: 'pi pi-shopping-bag',
+    Healthcare: 'pi pi-heart',
+    Education: 'pi pi-book',
+  };
+  return iconMap[category] || 'pi pi-wallet';
+}
+
 function resetForm() {
   form.type = '';
   form.amount = 0;
@@ -90,7 +121,7 @@ function handleSubmit() {
   <div>
     <!-- Header with title and Add button -->
     <div class="page-header">
-      <h1>Transactions</h1>
+      <h1 class="text-3xl font-bold text-gray-800 m-0">Transactions</h1>
       <Button label="New Transaction" icon="pi pi-plus" @click="showAddDialog = true"></Button>
     </div>
 
@@ -127,8 +158,9 @@ function handleSubmit() {
       ></Button>
     </div>
 
-    <!-- DataTable -->
+    <!-- DataTable (Desktop) -->
     <DataTable
+      v-if="!isMobile"
       :value="filteredTransactions"
       table-style="min-width:50rem"
       paginator
@@ -165,6 +197,40 @@ function handleSubmit() {
         </template>
       </Column>
     </DataTable>
+
+    <!-- Card List View (Mobile) -->
+    <div v-else class="transaction-cards">
+      <div
+        v-for="transaction in filteredTransactions"
+        :key="transaction.id"
+        class="transaction-card"
+        @click="router.push(`/transactions/${transaction.id}`)"
+      >
+        <div class="card-icon">
+          <i :class="getCategoryIcon(transaction.category)"></i>
+        </div>
+        <div class="card-content">
+          <div class="card-title">{{ transaction.description || transaction.category }}</div>
+          <div class="card-meta">
+            <span class="card-date">{{ formatDate(transaction.date) }}</span>
+          </div>
+        </div>
+        <div class="card-right">
+          <div class="card-amount" :class="transaction.type">
+            {{ transaction.type === 'income' ? '+' : '-' }}RM{{ transaction.amount.toFixed(2) }}
+          </div>
+          <Tag
+            :value="transaction.category"
+            size="small"
+            :severity="transaction.type === 'income' ? 'success' : 'secondary'"
+            class="card-tag"
+          />
+        </div>
+      </div>
+      <div v-if="filteredTransactions.length === 0" class="no-transactions">
+        No transactions found
+      </div>
+    </div>
 
     <!-- Add Transaction Dialog -->
     <Dialog
@@ -273,6 +339,109 @@ function handleSubmit() {
   color: #4b5563;
 }
 
+/* Mobile Card View Styles */
+.transaction-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.transaction-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.transaction-card:hover {
+  background: #f9fafb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.card-date {
+  color: #6b7280;
+}
+
+.card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.card-amount {
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: right;
+  margin: 0; /* Reset previous margin */
+}
+
+.card-amount.income {
+  color: #10b981;
+}
+
+.card-amount.expense {
+  color: #ef4444;
+}
+
+.card-tag {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.no-transactions {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
 @media (max-width: 768px) {
   .search-container {
     max-width: 100%;
@@ -280,7 +449,8 @@ function handleSubmit() {
 
   .page-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     gap: 1rem;
   }
 }

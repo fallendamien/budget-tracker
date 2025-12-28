@@ -92,7 +92,7 @@ const recentTransactions = computed(() => {
 
 <template>
   <div class="dashboard-container">
-    <div class="mb-4">
+    <div class="mb-4 dashboard-header">
       <h1 class="text-3xl font-bold text-gray-800 m-0">Dashboard</h1>
       <p class="text-gray-500 m-0">Welcome back, here's your financial overview.</p>
     </div>
@@ -229,9 +229,10 @@ const recentTransactions = computed(() => {
 }
 
 .balance-summary-card {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
-  border: 1px solid #bfdbfe !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  background: #f5f5f5 !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+  border-radius: 12px !important;
 }
 
 .balance-summary-card :deep(.p-card-content) {
@@ -240,25 +241,25 @@ const recentTransactions = computed(() => {
 
 .balance-section {
   text-align: center;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-  margin-bottom: 1.5rem;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #f3f4f6;
 }
 
 .balance-label {
   display: block;
-  font-size: 0.875rem;
-  color: #3b82f6;
-  font-weight: 500;
-  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .balance-amount {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #1e40af;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #4b5563;
   letter-spacing: -1px;
 }
 
@@ -273,10 +274,10 @@ const recentTransactions = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 10px;
 }
 
 .metric-info {
@@ -370,6 +371,11 @@ const recentTransactions = computed(() => {
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .dashboard-header {
+    text-align: center;
+    margin-bottom: 1.5rem !important;
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }

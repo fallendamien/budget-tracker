@@ -71,6 +71,7 @@ function handleDelete() {
     icon: 'pi pi-exclamation-triangle',
     rejectLabel: 'Cancel',
     acceptLabel: 'Delete',
+    acceptClass: 'p-button-danger',
     accept: () => {
       store.deleteTransaction(transaction.value.id);
       router.push('/transactions');
@@ -105,7 +106,7 @@ function goBack() {
 
     <Card>
       <template #title>
-        <div class="card-header">
+        <div class="card-header mb-4">
           <span>Transaction Detail</span>
           <div class="header-actions" v-if="!isEditing">
             <Button
@@ -293,5 +294,31 @@ function goBack() {
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions button {
+    flex: 1;
+  }
+
+  .form-container {
+    padding-bottom: 2rem;
+  }
+
+  .button-group {
+    padding-bottom: 2rem;
+  }
 }
 </style>

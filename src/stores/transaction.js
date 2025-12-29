@@ -1,10 +1,11 @@
 import { db } from '@/firebase/config';
-import { ref as dbRef, push, set, update, remove, onValue } from 'firebase/database';
+import { ref as dbRef, push, update, remove, onValue } from 'firebase/database';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 export const useTransactionStore = defineStore('transaction', () => {
   const transactions = ref([]);
+  const hasLoaded = ref(false); // Track if Firebase has responded
 
   // Computed
   const totalIncome = computed(() => {
@@ -56,11 +57,13 @@ export const useTransactionStore = defineStore('transaction', () => {
       } else {
         transactions.value = [];
       }
+      hasLoaded.value = true; // Mark as loaded after Firebase responds
     });
   }
 
   return {
     transactions,
+    hasLoaded,
     balance,
     totalIncome,
     totalExpense,

@@ -227,8 +227,17 @@ function handleSubmit() {
           />
         </div>
       </div>
-      <div v-if="filteredTransactions.length === 0" class="no-transactions">
-        No transactions found
+      <!-- Loading state -->
+      <div v-if="!store.hasLoaded" class="loading-state">
+        <i class="pi pi-spin pi-spinner text-4xl text-gray-400"></i>
+        <p class="mt-3 text-gray-500">Loading transactions...</p>
+      </div>
+
+      <!-- Empty state (after loading) -->
+      <div v-else-if="filteredTransactions.length === 0" class="no-transactions">
+        <i class="pi pi-inbox text-4xl text-gray-300 mb-2"></i>
+        <p class="text-gray-500 font-medium">No transactions found</p>
+        <p class="text-gray-400 text-sm mt-1">Add your first transaction to get started</p>
       </div>
     </div>
 
@@ -435,11 +444,20 @@ function handleSubmit() {
   padding: 0.1rem 0.4rem;
 }
 
+.loading-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .no-transactions {
   text-align: center;
   padding: 3rem 1rem;
-  color: #9ca3af;
-  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

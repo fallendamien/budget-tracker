@@ -91,7 +91,7 @@ onMounted(() => {
 }
 
 .container {
-  padding: 0 2rem;
+  padding: 0 2rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -119,7 +119,7 @@ onMounted(() => {
   }
 
   .container {
-    padding: 0 1rem;
+    padding: 0 1rem 1rem;
   }
 }
 </style>

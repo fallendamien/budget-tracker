@@ -104,7 +104,29 @@ function goBack() {
       class="mb-3"
     ></Button>
 
-    <Card>
+    <!-- Loading state while Firebase loads data -->
+    <Card v-if="!transaction">
+      <template #content>
+        <div class="text-center py-5">
+          <i class="pi pi-spin pi-spinner text-4xl text-gray-400"></i>
+          <p class="mt-3 text-gray-500">Loading transaction...</p>
+        </div>
+      </template>
+    </Card>
+
+    <!-- Transaction not found -->
+    <Card v-else-if="transaction === null">
+      <template #content>
+        <div class="text-center py-5">
+          <i class="pi pi-exclamation-triangle text-4xl text-red-500"></i>
+          <p class="mt-3 text-gray-700">Transaction not found</p>
+          <Button label="Back to Transactions" @click="goBack" class="mt-3"></Button>
+        </div>
+      </template>
+    </Card>
+
+    <!-- Main content - only renders when transaction exists -->
+    <Card v-else>
       <template #title>
         <div class="card-header mb-4">
           <span>Transaction Detail</span>
@@ -135,27 +157,27 @@ function goBack() {
           <div class="detail-row">
             <span class="detail-label">Type</span>
             <Tag
-              :value="transaction?.type.charAt(0).toUpperCase() + transaction?.type.slice(1)"
-              :severity="transaction?.type === 'income' ? 'success' : 'danger'"
+              :value="transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)"
+              :severity="transaction.type === 'income' ? 'success' : 'danger'"
             ></Tag>
           </div>
           <div class="detail-row">
             <span class="detail-label">Amount</span>
-            <span class="detail-value amount" :class="transaction?.type">
-              RM {{ transaction?.amount }}
+            <span class="detail-value amount" :class="transaction.type">
+              RM {{ transaction.amount }}
             </span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Category</span>
-            <span class="detail-value">{{ transaction?.category }}</span>
+            <span class="detail-value">{{ transaction.category }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Description</span>
-            <span class="detail-value">{{ transaction?.description }}</span>
+            <span class="detail-value">{{ transaction.description }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Date</span>
-            <span class="detail-value">{{ formatDate(transaction?.date) }}</span>
+            <span class="detail-value">{{ formatDate(transaction.date) }}</span>
           </div>
         </div>
 

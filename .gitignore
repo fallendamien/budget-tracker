@@ -34,6 +34,8 @@ coverage
 # Vitest
 __screenshots__/
 
-# Project Documentation (Private)
+# Project Documentation 
 ROADMAP.md
-AI_MENTOR_CONTEXT.md
+
+# Agent Configuration
+.agent/

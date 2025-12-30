@@ -194,6 +194,36 @@ async function handleLoadSample() {
       sort-field="createdAt"
       :sort-order="-1"
     >
+      <template #empty>
+        <div class="no-transactions">
+          <i class="pi pi-inbox text-4xl text-gray-300 mb-2"></i>
+          <p v-if="searchTerm" class="text-gray-500 font-medium">
+            No transactions match "{{ searchTerm }}"
+          </p>
+          <p v-else class="text-gray-500 font-medium">No transactions yet</p>
+          <p v-if="searchTerm" class="text-gray-400 text-sm mt-1">
+            Try searching by description, category, or type
+          </p>
+          <div
+            v-else
+            class="mt-4 flex flex-column gap-3 align-items-center w-full max-w-xs mx-auto"
+          >
+            <Button
+              label="Load Sample Data"
+              icon="pi pi-chart-bar"
+              @click="handleLoadSample"
+              outlined
+              class="w-full"
+            />
+            <Button
+              label="Add Transaction"
+              icon="pi pi-plus"
+              @click="showAddDialog = true"
+              class="w-full"
+            />
+          </div>
+        </div>
+      </template>
       <Column header="#" :exportable="false">
         <template #body="slotProps">
           {{ slotProps.index + 1 }}

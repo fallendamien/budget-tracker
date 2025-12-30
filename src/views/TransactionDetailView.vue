@@ -77,7 +77,11 @@ function handleDelete() {
     acceptClass: 'p-button-danger',
     accept: () => {
       store.deleteTransaction(transaction.value.id);
-      router.push('/transactions');
+      showSuccess('Transaction deleted successfully');
+      // Delay navigation to allow toast to show
+      setTimeout(() => {
+        router.push('/transactions');
+      }, 2000);
     },
   });
 }

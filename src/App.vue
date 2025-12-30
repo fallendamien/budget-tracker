@@ -3,6 +3,7 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import { RouterLink, RouterView } from 'vue-router';
 import { useTransactionStore } from './stores/transaction';
 import { onMounted } from 'vue';
+import { PhMathOperations } from '@phosphor-icons/vue';
 
 // Stores/Composables
 const store = useTransactionStore();
@@ -16,7 +17,7 @@ onMounted(() => {
   <confirm-dialog></confirm-dialog>
   <nav class="navbar">
     <div class="nav-brand">
-      <i class="pi pi-chart-bar brand-icon"></i>
+      <PhMathOperations :size="32" weight="fill" class="brand-icon" />
       Budget Tracker
     </div>
     <div class="nav-links">
@@ -45,6 +46,9 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .nav-brand {
@@ -143,6 +147,19 @@ body {
   .p-confirmdialog {
     margin: 1rem !important;
     max-width: calc(100% - 2rem) !important;
+  }
+
+  /* Make toasts responsive */
+  .p-toast {
+    width: auto !important;
+    max-width: calc(100% - 2rem) !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    top: 1rem !important;
+  }
+
+  .p-toast-message-content {
+    word-break: break-word; /* Ensure text wraps on small screens */
   }
 }
 </style>

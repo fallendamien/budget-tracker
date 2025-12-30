@@ -1,11 +1,13 @@
 <script setup>
 import { useFormatDate } from '@/composables/useFormatDate';
+import { useTransactionValidation } from '@/composables/useTransactionValidation';
 import { useTransactionStore } from '@/stores/transaction';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Tag from 'primevue/tag';
+import Toast from 'primevue/toast';
 import { useConfirm } from 'primevue/useconfirm';
 import Select from 'primevue/select';
 import InputNumber from 'primevue/inputnumber';
@@ -19,6 +21,7 @@ const store = useTransactionStore();
 const router = useRouter();
 const confirm = useConfirm();
 const { formatDate } = useFormatDate();
+const { validateTransaction, showValidationError, showSuccess } = useTransactionValidation();
 
 // Constants
 const typeOptions = TYPE_OPTIONS;
@@ -80,11 +83,22 @@ function handleDelete() {
 }
 
 function handleSave() {
+  // Validate form before saving
+  const validation = validateTransaction(editForm.value);
+
+  if (!validation.valid) {
+    showValidationError(validation.errors);
+    return;
+  }
+
   const formattedData = {
     ...editForm.value,
     date: editForm.value.date.toISOString().split('T')[0], // convert date back to YYYY-MM-DD
   };
   store.updateTransaction(transaction.value.id, formattedData);
+
+  showSuccess('Transaction updated successfully');
+
   isEditing.value = false;
 }
 
@@ -94,6 +108,7 @@ function goBack() {
 </script>
 
 <template>
+  <Toast />
   <div>
     <Button
       label="Back"

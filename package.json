@@ -13,6 +13,7 @@
     "lint": "eslint . --fix --cache"
   },
   "dependencies": {
+    "@phosphor-icons/vue": "^2.2.1",
     "@primevue/themes": "^4.5.3",
     "chart.js": "^4.5.1",
     "firebase": "^12.7.0",

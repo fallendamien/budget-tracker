@@ -1,5 +1,6 @@
 <script setup>
 import { useFormatDate } from '@/composables/useFormatDate';
+import { useTransactionValidation } from '@/composables/useTransactionValidation';
 import { useTransactionStore } from '@/stores/transaction';
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES, TYPE_OPTIONS } from '@/constants';
 import Tag from 'primevue/tag';
@@ -13,12 +14,15 @@ import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
+import Toast from 'primevue/toast';
 import { computed, reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { PhCaretRight } from '@phosphor-icons/vue';
 
 // Stores/Composables
 const store = useTransactionStore();
 const { formatDate } = useFormatDate();
+const { validateTransaction, showValidationError, showSuccess } = useTransactionValidation();
 const router = useRouter();
 
 // Constants
@@ -111,13 +115,23 @@ function resetForm() {
 }
 
 function handleSubmit() {
+  // Validate form before submitting
+  const validation = validateTransaction(form);
+
+  if (!validation.valid) {
+    showValidationError(validation.errors);
+    return;
+  }
+
   store.addTransaction(form);
+  showSuccess('Transaction added successfully');
   showAddDialog.value = false;
   resetForm();
 }
 </script>
 
 <template>
+  <Toast />
   <div>
     <!-- Header with title and Add button -->
     <div class="page-header">
@@ -131,7 +145,7 @@ function handleSubmit() {
         <InputIcon class="pi pi-search"></InputIcon>
         <InputText
           v-model="searchTerm"
-          placeholder="Search by type, category, or description..."
+          placeholder="Search transactions..."
           class="w-full"
         ></InputText>
       </IconField>
@@ -226,6 +240,9 @@ function handleSubmit() {
             class="card-tag"
           />
         </div>
+        <div class="card-arrow">
+          <PhCaretRight weight="fill" :size="14" />
+        </div>
       </div>
       <!-- Loading state -->
       <div v-if="!store.hasLoaded" class="loading-state">
@@ -236,8 +253,14 @@ function handleSubmit() {
       <!-- Empty state (after loading) -->
       <div v-else-if="filteredTransactions.length === 0" class="no-transactions">
         <i class="pi pi-inbox text-4xl text-gray-300 mb-2"></i>
-        <p class="text-gray-500 font-medium">No transactions found</p>
-        <p class="text-gray-400 text-sm mt-1">Add your first transaction to get started</p>
+        <p v-if="searchTerm" class="text-gray-500 font-medium">
+          No transactions match "{{ searchTerm }}"
+        </p>
+        <p v-else class="text-gray-500 font-medium">No transactions found</p>
+        <p v-if="searchTerm" class="text-gray-400 text-sm mt-1">
+          Try searching by description, category, or type
+        </p>
+        <p v-else class="text-gray-400 text-sm mt-1">Add your first transaction to get started</p>
       </div>
     </div>
 
@@ -360,6 +383,7 @@ function handleSubmit() {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
+  padding-right: 0.5rem; /* Less padding on right for arrow */
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -442,6 +466,15 @@ function handleSubmit() {
 .card-tag {
   font-size: 0.7rem;
   padding: 0.1rem 0.4rem;
+}
+
+.card-arrow {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
 }
 
 .loading-state {

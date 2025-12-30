@@ -128,6 +128,11 @@ function handleSubmit() {
   showAddDialog.value = false;
   resetForm();
 }
+
+async function handleLoadSample() {
+  await store.loadSampleData();
+  showSuccess('Sample data loaded! Feel free to edit or delete these transactions.');
+}
 </script>
 
 <template>
@@ -136,7 +141,12 @@ function handleSubmit() {
     <!-- Header with title and Add button -->
     <div class="page-header">
       <h1 class="text-3xl font-bold text-gray-800 m-0">Transactions</h1>
-      <Button label="New Transaction" icon="pi pi-plus" @click="showAddDialog = true"></Button>
+      <Button
+        v-if="store.transactions.length > 0"
+        label="New Transaction"
+        icon="pi pi-plus"
+        @click="showAddDialog = true"
+      ></Button>
     </div>
 
     <!-- Search -->
@@ -256,11 +266,25 @@ function handleSubmit() {
         <p v-if="searchTerm" class="text-gray-500 font-medium">
           No transactions match "{{ searchTerm }}"
         </p>
-        <p v-else class="text-gray-500 font-medium">No transactions found</p>
+        <p v-else class="text-gray-500 font-medium">No transactions yet</p>
         <p v-if="searchTerm" class="text-gray-400 text-sm mt-1">
           Try searching by description, category, or type
         </p>
-        <p v-else class="text-gray-400 text-sm mt-1">Add your first transaction to get started</p>
+        <div v-else class="mt-4 flex flex-column gap-3 align-items-center w-full max-w-xs mx-auto">
+          <Button
+            label="Load Sample Data"
+            icon="pi pi-chart-bar"
+            @click="handleLoadSample"
+            outlined
+            class="w-full"
+          />
+          <Button
+            label="Add Transaction"
+            icon="pi pi-plus"
+            @click="showAddDialog = true"
+            class="w-full"
+          />
+        </div>
       </div>
     </div>
 

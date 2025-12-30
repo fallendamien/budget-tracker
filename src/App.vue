@@ -29,6 +29,10 @@ onMounted(() => {
         <i class="pi pi-list"></i>
         <span>Transactions</span>
       </router-link>
+      <router-link to="/settings" class="nav-link">
+        <i class="pi pi-cog"></i>
+        <span>Settings</span>
+      </router-link>
     </div>
   </nav>
 

@@ -1,11 +1,12 @@
-import { db } from '@/firebase/config';
-import { ref as dbRef, push, update, remove, onValue } from 'firebase/database';
+import { useStorage } from '@/composables/useStorage';
+import { SAMPLE_TRANSACTIONS } from '@/constants/sampleData';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 export const useTransactionStore = defineStore('transaction', () => {
   const transactions = ref([]);
-  const hasLoaded = ref(false); // Track if Firebase has responded
+  const hasLoaded = ref(false);
+  const storage = useStorage();
 
   // Computed
   const totalIncome = computed(() => {
@@ -31,34 +32,35 @@ export const useTransactionStore = defineStore('transaction', () => {
       createdAt: Date.now(),
     };
 
-    const transactionsRef = dbRef(db, 'transactions');
-    await push(transactionsRef, newTransaction);
+    await storage.saveTransaction(newTransaction);
+    await fetchTransactions();
   }
 
   async function updateTransaction(id, updatedData) {
-    const transactionsRef = dbRef(db, `transactions/${id}`);
-    await update(transactionsRef, updatedData);
+    await storage.updateTransaction(id, updatedData);
+    await fetchTransactions();
   }
 
   async function deleteTransaction(id) {
-    const transactionsRef = dbRef(db, `transactions/${id}`);
-    await remove(transactionsRef);
+    await storage.removeTransaction(id);
+    await fetchTransactions();
   }
 
-  function fetchTransactions() {
-    const transactionsRef = dbRef(db, 'transactions');
-    onValue(transactionsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        transactions.value = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
-      } else {
-        transactions.value = [];
-      }
-      hasLoaded.value = true; // Mark as loaded after Firebase responds
-    });
+  async function fetchTransactions() {
+    transactions.value = storage.loadTransactions();
+    hasLoaded.value = true;
+  }
+
+  async function loadSampleData() {
+    for (const transaction of SAMPLE_TRANSACTIONS) {
+      await storage.saveTransaction(transaction);
+    }
+    await fetchTransactions();
+  }
+
+  async function clearAllData() {
+    await storage.clearAll();
+    await fetchTransactions();
   }
 
   return {
@@ -71,5 +73,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     updateTransaction,
     deleteTransaction,
     fetchTransactions,
+    loadSampleData,
+    clearAllData,
   };
 });

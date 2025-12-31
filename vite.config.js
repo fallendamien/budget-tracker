@@ -27,7 +27,7 @@ export default defineConfig({
         name: 'Budget Tracker',
         short_name: 'Budget',
         description: 'Track your income and expenses offline',
-        theme_color: '#10b981',
+        theme_color: '#1f2937',
         background_color: '#ffffff',
         display: 'standalone',
         icons: [

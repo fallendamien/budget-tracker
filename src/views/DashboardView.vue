@@ -6,6 +6,7 @@ import Chart from 'primevue/chart';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
 import { computed, ref } from 'vue';
+import { PhWallet, PhTrendUp, PhTrendDown } from '@phosphor-icons/vue';
 
 const store = useTransactionStore();
 const { formatDate } = useFormatDate();
@@ -101,46 +102,43 @@ const recentTransactions = computed(() => {
     <div class="dashboard-grid">
       <!-- Left Sidebar - Balance Summary -->
       <div class="sidebar-section">
-        <Card class="balance-summary-card">
-          <template #content>
-            <div class="balance-section">
-              <span class="balance-label">
-                <i class="pi pi-wallet"></i>
-                Your Balance
-              </span>
-              <div class="balance-amount">RM {{ store.balance }}</div>
+        <div class="balance-card bg-gray-100 shadow-1 border-round-xl p-4 border-1 border-gray-100">
+          <div class="mb-4">
+            <div class="flex align-items-center gap-2 justify-content-center mb-2">
+              <PhWallet :size="18" weight="duotone" class="text-gray-400" />
+              <span class="text-gray-500 font-medium text-sm">Total Balance</span>
+            </div>
+            <div class="text-4xl font-bold text-gray-800 text-center">RM {{ store.balance }}</div>
+          </div>
+
+          <div class="flex gap-3 pt-3 border-top-1 border-gray-100">
+            <div class="flex-1 flex flex-column align-items-center">
+              <div class="flex align-items-center gap-2 mb-1">
+                <div
+                  class="bg-green-50 w-2rem h-2rem border-round-circle flex align-items-center justify-content-center"
+                >
+                  <PhTrendUp :size="16" weight="bold" class="text-green-500" />
+                </div>
+                <span class="text-xs text-gray-500 font-medium uppercase">Income</span>
+              </div>
+              <div class="text-lg font-bold text-green-500">RM {{ store.totalIncome }}</div>
             </div>
 
-            <!-- Stacked Income/Expense -->
-            <div class="metrics-stack">
-              <div class="metric-row">
-                <div class="metric-info">
-                  <span class="metric-label">Income</span>
-                  <div class="metric-value income">
-                    <i class="pi pi-arrow-up"></i>
-                    <span>RM {{ store.totalIncome }}</span>
-                  </div>
-                </div>
-                <div class="metric-badge income-badge">
-                  <i class="pi pi-money-bill"></i>
-                </div>
-              </div>
+            <div class="w-1px bg-gray-100"></div>
 
-              <div class="metric-row">
-                <div class="metric-info">
-                  <span class="metric-label">Expense</span>
-                  <div class="metric-value expense">
-                    <i class="pi pi-arrow-down"></i>
-                    <span>RM {{ store.totalExpense }}</span>
-                  </div>
+            <div class="flex-1 flex flex-column align-items-center">
+              <div class="flex align-items-center gap-2 mb-1">
+                <div
+                  class="bg-red-50 w-2rem h-2rem border-round-circle flex align-items-center justify-content-center"
+                >
+                  <PhTrendDown :size="16" weight="bold" class="text-red-500" />
                 </div>
-                <div class="metric-badge expense-badge">
-                  <i class="pi pi-cart-minus"></i>
-                </div>
+                <span class="text-xs text-gray-500 font-medium uppercase">Expense</span>
               </div>
+              <div class="text-lg font-bold text-red-500">RM {{ store.totalExpense }}</div>
             </div>
-          </template>
-        </Card>
+          </div>
+        </div>
       </div>
 
       <!-- Right Column - Chart & Transactions -->
@@ -226,111 +224,6 @@ const recentTransactions = computed(() => {
 .sidebar-section {
   position: sticky;
   top: 1rem;
-}
-
-.balance-summary-card {
-  background: #f5f5f5 !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
-  border-radius: 12px !important;
-}
-
-.balance-summary-card :deep(.p-card-content) {
-  padding: 2rem !important;
-}
-
-.balance-section {
-  text-align: center;
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.balance-label {
-  display: block;
-  font-size: 0.75rem;
-  color: #6b7280;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.balance-amount {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #4b5563;
-  letter-spacing: -1px;
-}
-
-/* Stacked Metrics */
-.metrics-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.metric-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem;
-  background: #f9fafb;
-  border: 1px solid #f3f4f6;
-  border-radius: 10px;
-}
-
-.metric-info {
-  flex: 1;
-}
-
-.metric-label {
-  display: block;
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.metric-value {
-  font-size: 1.125rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.metric-value.income {
-  color: #10b981;
-}
-
-.metric-value.expense {
-  color: #ef4444;
-}
-
-.metric-value i {
-  font-size: 1rem;
-}
-
-.metric-badge {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-}
-
-.income-badge {
-  background-color: #d1fae5;
-  color: #10b981;
-}
-
-.expense-badge {
-  background-color: #fee2e2;
-  color: #ef4444;
 }
 
 /* Right Content Section */

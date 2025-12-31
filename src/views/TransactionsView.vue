@@ -15,6 +15,7 @@ import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import Toast from 'primevue/toast';
+import { useConfirm } from 'primevue/useconfirm';
 import { computed, reactive, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { PhCaretRight } from '@phosphor-icons/vue';
@@ -24,6 +25,7 @@ const store = useTransactionStore();
 const { formatDate } = useFormatDate();
 const { validateTransaction, showValidationError, showSuccess } = useTransactionValidation();
 const router = useRouter();
+const confirm = useConfirm();
 
 // Constants
 const columns = [
@@ -82,7 +84,9 @@ const filteredTransactions = computed(() => {
         t.type.toLowerCase().includes(lowerCaseSearch)
     );
   }
-  return result; //final filtered result
+
+  // Sort by date descending (newest first)
+  return result.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
 });
 
 // Functions
@@ -130,8 +134,19 @@ function handleSubmit() {
 }
 
 async function handleLoadSample() {
-  await store.loadSampleData();
-  showSuccess('Sample data loaded! Feel free to edit or delete these transactions.');
+  confirm.require({
+    message:
+      'This will populate your app with sample transactions including income and expenses. You can edit or delete them anytime.',
+    header: 'Load Sample Data?',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    acceptLabel: 'Load Data',
+    acceptClass: 'p-button-success',
+    accept: () => {
+      store.loadSampleData();
+      showSuccess('Sample data loaded! Feel free to edit or delete these transactions.');
+    },
+  });
 }
 </script>
 

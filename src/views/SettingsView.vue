@@ -20,15 +20,16 @@ function exportData() {
   const link = document.createElement('a');
   link.href = url;
   link.download = `budget_backup_${new Date().toISOString().split('T')[0]}.json`;
-  link.click();
-  URL.revokeObjectURL(url);
 
-  toast.add({
-    severity: 'success',
-    summary: 'Export Successful',
-    detail: 'Your data has been downloaded',
-    life: 3000,
-  });
+  // Append to body, click, then remove (better browser compatibility)
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  // Delay revoking URL to ensure download completes
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 1000);
 }
 
 function handleImport(event) {
@@ -51,7 +52,7 @@ function handleImport(event) {
         icon: 'pi pi-exclamation-triangle',
         acceptLabel: 'Import',
         rejectLabel: 'Cancel',
-        acceptClass: 'p-button-warning',
+        acceptClass: 'p-button-success',
         accept: async () => {
           await store.clearAllData();
           for (const transaction of data) {

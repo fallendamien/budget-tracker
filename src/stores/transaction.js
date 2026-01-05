@@ -28,7 +28,10 @@ export const useTransactionStore = defineStore('transaction', () => {
       amount: formData.amount,
       category: formData.category,
       description: formData.description,
-      date: formData.date.toISOString().split('T')[0],
+      date: `${formData.date.getFullYear()}-${String(formData.date.getMonth() + 1).padStart(
+        2,
+        '0'
+      )}-${String(formData.date.getDate()).padStart(2, '0')}`, // Format as YYYY-MM-DD in local timezone
       createdAt: Date.now(),
     };
 

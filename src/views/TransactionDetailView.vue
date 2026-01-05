@@ -97,7 +97,9 @@ function handleSave() {
 
   const formattedData = {
     ...editForm.value,
-    date: editForm.value.date.toISOString().split('T')[0], // convert date back to YYYY-MM-DD
+    date: `${editForm.value.date.getFullYear()}-${String(
+      editForm.value.date.getMonth() + 1
+    ).padStart(2, '0')}-${String(editForm.value.date.getDate()).padStart(2, '0')}`, // Format as YYYY-MM-DD in local timezone
   };
   store.updateTransaction(transaction.value.id, formattedData);
 

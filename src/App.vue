@@ -4,11 +4,33 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useTransactionStore } from './stores/transaction';
 import { onMounted } from 'vue';
 import { PhMathOperations } from '@phosphor-icons/vue';
+// import { auth } from './firebase/config';
+// import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 
 // Stores/Composables
 const store = useTransactionStore();
 
-onMounted(() => {
+onMounted(async () => {
+  // Set up auth state listener
+  /*
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log('User authenticated:', user.uid);
+      // Fetch transactions once user is authenticated
+      store.fetchTransactions();
+    } else {
+      console.log('No user authenticated, signing in anonymously...');
+      // Sign in anonymously if no user
+      signInAnonymously(auth)
+        .then(() => {
+          console.log('Anonymous sign-in successful');
+        })
+        .catch((error) => {
+          console.error('Anonymous sign-in failed:', error);
+        });
+    }
+  });
+  */
   store.fetchTransactions();
 });
 </script>
@@ -59,7 +81,12 @@ onMounted(() => {
   font-size: 1.5rem;
   font-weight: 700;
   color: #4b5563;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -134,7 +161,11 @@ onMounted(() => {
 
 <style>
 body {
-  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Poppins',
+    system-ui,
+    -apple-system,
+    sans-serif;
   background-color: #f8f9fa;
   color: #1f2937;
   margin: 0;
